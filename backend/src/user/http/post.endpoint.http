@@ -1,0 +1,11 @@
+POST http://localhost:3000/user/sign-up
+Content-Type: application/json
+{
+    "username": "user2",
+    "email":"emails@user.com",
+    "password": "@Password123",
+    "tokens": 0,
+    "totalScore": 0,
+    "gamesPlayed": 0,
+    "gamesWon": 0
+}

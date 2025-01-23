@@ -1,31 +1,38 @@
-import { BadRequestException, Injectable, RequestTimeoutException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  RequestTimeoutException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../user.entity';
 
 @Injectable()
 export class FindOneUserByEmailProvider {
   constructor(
     // Inject users Repository Injection
     @InjectRepository(User)
-    private readonly usersRepository: UsersRepository<User>,
-  ) { }
-    
-    public async findOneUserByEmail(email: string) {
-      
-        let user: User | undefined;
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
-        try {
-            user = await this.usersRepository.findOneBy({
-                 email
-            });
-        } catch (error) {
-            throw new RequestTimeoutException(error, {
-                description: "Could not fetch the user"
-            });
-        }
+  public async findOneUserByEmail(email: string) {
+    let user: User | undefined;
 
-        if (!user) {
-            throw new UnauthorizedException('User not found');
-        }
+    try {
+      user = await this.usersRepository.findOneBy({
+        email,
+      });
+    } catch (error) {
+      throw new RequestTimeoutException(error, {
+        description: 'Could not fetch the user',
+      });
+    }
 
-        return user;
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return user;
+  }
 }
